@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exchange Rate App fastFOREX API</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      .form-control {
+        border-radius: 0.5rem;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        border-radius: 0.5rem;
+        transition: background-color 0.3s, border-color 0.3s;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+      .list-group-item {
+        font-size: 0.9rem;
+        border: none;
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+      }
+      .alert {
+        border-radius: 0.5rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h1 class="text-center">{{ welcome_msg }}</h1>
+
+      {% if error_msg %}
+      <div class="alert alert-danger" role="alert">{{ error_msg }}</div>
+      {% endif %}
+
+      <form method="post" class="mb-4"> {% comment %}  ข้อมูลในฟอร์มจะถูกส่งผ่าน HTTP POST  {% endcomment %}
+        {% csrf_token %}{% comment %} แท็กของ Django สำหรับการป้องกัน CSRF เป็นการโจมตีรูปแบบหนึ่ง{% endcomment %}
+        
+        <div class="form-group"> 
+          <label for="base_currency">Base Currency:</label>
+          <select class="form-control" name="base_currency" id="base_currency">
+           
+            {% for currency in supported_currencies %} {% comment %} ใช้เพื่อลูปผ่านรายการของสกุลเงินที่รองรับ  {% endcomment %}
+            <option value="{{ currency }}">{{ currency }}</option>
+            {% endfor %}
+         
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="amount">Amount:</label>
+          <input
+            type="number" {% comment %} type="number" ซึ่งจะให้เฉพาะค่าที่เป็นตัวเลข {% endcomment %}
+            class="form-control"
+            name="amount" {% comment %} ชื่อของฟิลด์นี้ จะถูกใช้เมื่อส่งข้อมูลฟอร์มไปยังเซิร์ฟเวอร์ {% endcomment %}
+            id="amount" {% comment %} รหัสประจำฟิลด์นี้ ซึ่งเชื่อมโยงกับป้ายกำกับ {% endcomment %}
+            min="1" {% comment %} กำหนดค่าต่ำสุดที่ผู้ใช้สามารถกรอกได้คือ 1 {% endcomment %}
+            required {% comment %} ระบุว่าฟิลด์นี้เป็นฟิลด์ที่จำเป็นต้องกรอกก่อนส่งฟอร์ม {% endcomment %}
+          />
+        
+        </div>
+        <button type="submit" class="btn btn-primary">Get Rates</button>
+      </form>
+
+      {% if last_updated %}
+      <p><strong>Last Updated:</strong> {{ last_updated }}</p>
+      {% endif %} {% comment %} อัพเดทเวลา {% endcomment %}
+      
+      {% if amount_to_exchange %}
+      <h2>Exchange Amount:</h2>
+      <p>You are exchanging: {{ amount_to_exchange }} {{ base_currency }}</p>
+      {% endif %} {% comment %} จำนวนเงินที่ผู้ใช้กรอก {% endcomment %}
+
+      <div class="row">
+        <div class="col-md-6">
+          
+          {% if exchange_rates %}
+          <h2>Exchange Rates:</h2>
+          <ul class="list-group">
+            {% for currency, rate in exchange_rates.items %} {% comment %} แสดงอัตราแลกเปลี่ยน {% endcomment %}
+            <li class="list-group-item">{{ currency }}: {{ rate }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+
+        <div class="col-md-6">
+          {% if converted_amounts %}
+          <h2>Converted Amounts:</h2>
+          <ul class="list-group">
+            {% for currency, converted_amount in converted_amounts.items %}
+            <li class="list-group-item">
+              {{ currency }}: {{ converted_amount|floatformat:2 }} {% comment %} แปลงให้มีทศนิยม 2 ตำแหน่ง {% endcomment %}
+            </li> {% comment %} เงินที่แลกได้เท่ากับเท่าไหร่ {% endcomment %}
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies (Optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> {% comment %} jQuery {% endcomment %}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script> {% comment %} Popper.js {% endcomment %}
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> {% comment %} Bootstrap {% endcomment %}
+  </body>
+</html>

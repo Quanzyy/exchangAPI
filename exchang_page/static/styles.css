@@ -1,0 +1,51 @@
+body {
+  background-color: #e9ecef; /* สีพื้นหลังอ่อน */
+  font-family: "Arial", sans-serif;
+}
+
+.container {
+  background-color: #ffffff; /* สีพื้นหลังของคอนเทนเนอร์ */
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+h1 {
+  color: #007bff; /* เปลี่ยนสีหัวข้อ */
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #343a40; /* สีหัวข้อย่อย */
+  margin-top: 20px;
+}
+
+.form-control {
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  border-radius: 0.5rem;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.list-group-item {
+  font-size: 0.9rem;
+  border: none;
+  background-color: #f8f9fa; /* เปลี่ยนสีพื้นหลังของรายการ */
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 10px;
+}
+
+.alert {
+  border-radius: 0.5rem;
+}
